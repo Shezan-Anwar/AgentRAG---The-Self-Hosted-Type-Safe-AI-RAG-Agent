@@ -1,5 +1,6 @@
 #In this file ill be saving the ingenstion data in the db
 from app.database import get_db_connection
+from app.services.embedding import makeEmbeddings
 
 def saveDocumentToDB(file_name : str , rawText:str)-> int:
     from app.services.vector import breakIntoChunks
@@ -14,9 +15,10 @@ def saveDocumentToDB(file_name : str , rawText:str)-> int:
 
         Chunkquery = "INSERT INTO document_chunks (document_id , content , embedding) VALUES (%s, %s, %s);"
 
-        dummy_vector = [0.0] * 1536
+        
         for chunk in chunks: 
-            cur.execute(Chunkquery ,(documentId , chunk , dummy_vector))
+            vector = makeEmbeddings(chunk)
+            cur.execute(Chunkquery ,(documentId , chunk , vector))
 
         conn.commit()
         print(f"Successfully ingested document '{file_name}' with (Id : {documentId}) with {len(chunks)} chunks into the database.")
