@@ -6,3 +6,4 @@ python-dotenv
 langchain-text-splitters
 langchain-huggingface
 sentence-transformers
+google_genai
