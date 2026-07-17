@@ -1,12 +1,11 @@
 import React from 'react'
-import Navbar from './components/Navbar'
+import Background from './components/Background'
 
 
 const App = () => {
   return (
     <div>
-      <Navbar/>
-      <h1>Agent RAG</h1>
+      <Background/>
       
     </div>
   )
