@@ -20,7 +20,7 @@ const ChatInput = ({onSend ,disabled}:ChatInputProp) => {
     
 }
   return (
-    <div className="w-full">
+    <div className="w-full pt-1">
       <form onSubmit={handleSubmit} className="flex items-center gap-3 w-full">
         
         <input 
