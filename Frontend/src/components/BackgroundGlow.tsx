@@ -25,7 +25,7 @@ const BackgroundGlow = () => {
       
       {/* 🌌 Glow Dot 2: Subtle Deep Indigo/Purple Offset Bloom */}
       <motion.div 
-        className="absolute bottom-[20%] left-[25%] w-[300px] h-[300px] rounded-full bg-indigo-500/50" 
+        className="absolute bottom-[-20%] left-1/2 w-[00px] h-[300px] rounded-full bg-indigo-500/50" 
         style={{ filter: 'blur(100px)' }}
         animate={{
           scale: [1, 1.2, 1],

@@ -3,6 +3,7 @@ import ChatInput from './ChatInput'
 import { useState } from 'react';
 import ChatWindow from './ChatWIndow';
 import type { Message } from '../types/Chat';
+import UploadBox from './UploadBox';
 
 
 const ChatGrid = () => {
@@ -42,6 +43,7 @@ const ChatGrid = () => {
     <div className="w-full max-w-2xl bg-zinc-900/80 border border-zinc-800 rounded-2xl shadow-2xl shadow-black/50 p-2 backdrop-blur-md flex flex-col ">
         <ChatWindow messages={messages}/>
         <ChatInput onSend={handleSendMessage} disabled={isGenerating}/>
+        <UploadBox/>
 
     </div>
   )

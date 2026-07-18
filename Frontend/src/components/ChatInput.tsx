@@ -9,6 +9,7 @@ interface ChatInputProp {
 
 const ChatInput = ({onSend ,disabled}:ChatInputProp) => {
     const [input, setInput] = useState<string>('');
+    
 
 
     const handleSubmit = (e: React.FormEvent) =>{
