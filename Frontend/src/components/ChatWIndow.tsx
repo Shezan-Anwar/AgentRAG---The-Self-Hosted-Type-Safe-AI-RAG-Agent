@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import type { Message } from '../types/Chat';
 
 interface ChatWindowProps {
@@ -6,22 +6,23 @@ interface ChatWindowProps {
 }
 
 export const ChatWindow = ({ messages }: ChatWindowProps) => {
+  // 🚀 1. Create a reference point to anchor the bottom of the message thread
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // 🚀 2. Automatically trigger a smooth scroll down whenever a new message updates the DOM
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
   return (
-    /* 
-      Changed max-h-[400px] to h-[400px] (or min-h-[400px]) so it occupies 
-      the exact same real estate as the UploadBox component did.
-    */
-    <div className="flex-1 w-full h-[400px] overflow-y-auto p-4 space-y-4 bg-zinc-900/40 rounded-xl border border-zinc-800/60 scrollbar-thin scrollbar-thumb-zinc-800">
-      
-      {/* Empty State */}
+    <div className="flex-1 w-full max-h-[400px] overflow-y-auto p-4 space-y-4 bg-zinc-900/40 rounded-xl border border-zinc-800/60 scrollbar-thin scrollbar-thumb-zinc-800 flex flex-col justify-start">
       {messages.length === 0 ? (
-        <div className="h-full flex flex-col items-center justify-center text-center p-6 space-y-2">
-          <span className="text-2xl text-zinc-600">💬</span>
-          <p className="text-sm text-zinc-500 font-medium">No queries processed yet.</p>
-          <p className="text-xs text-zinc-600 max-w-xs">Start typing your queries below.</p>
+        <div className="h-full my-auto flex flex-col items-center justify-center text-center p-6 space-y-2">
+          <span className="text-2xl text-blue-500 animate-pulse">🤖</span>
+          <p className="text-sm text-zinc-400 font-medium">Context Vector Pipeline Active</p>
+          <p className="text-xs text-zinc-600 max-w-xs">Ask anything. The agent will read your uploaded text file to formulate answers.</p>
         </div>
       ) : (
-        // Message Loop
         messages.map((msg) => (
           <div
             key={msg.id}
@@ -29,7 +30,6 @@ export const ChatWindow = ({ messages }: ChatWindowProps) => {
               msg.sender === 'user' ? 'ml-auto items-end' : 'mr-auto items-start'
             }`}
           >
-            {/* Bubble */}
             <div
               className={`px-4 py-2.5 rounded-2xl text-sm leading-relaxed ${
                 msg.sender === 'user'
@@ -39,14 +39,15 @@ export const ChatWindow = ({ messages }: ChatWindowProps) => {
             >
               <p className="whitespace-pre-wrap">{msg.text}</p>
             </div>
-            
-            {/* Timestamp */}
             <span className="text-[10px] text-zinc-600 mt-1 px-1">
               {msg.timestamp}
             </span>
           </div>
         ))
       )}
+      
+      
+      <div ref={messagesEndRef} />
     </div>
   );
 };
