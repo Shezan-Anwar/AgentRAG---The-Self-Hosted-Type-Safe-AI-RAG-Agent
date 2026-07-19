@@ -1,32 +1,32 @@
-import React from 'react'
+import React, { useState } from 'react'
 import ChatInput from './ChatInput'
-import { useState } from 'react';
 import ChatWindow from './ChatWIndow';
-import type { Message } from '../types/Chat';
 import UploadBox from './UploadBox';
-
+import type { Message } from '../types/Chat';
 
 const ChatGrid = () => {
-    const [messages, setMessages] = useState<Message[]>([]);
-    const [isGenerating, setIsGenerating] = useState<boolean>(false);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [isGenerating, setIsGenerating] = useState<boolean>(false);
+  const [isDocumentUploaded, setIsDocumentUploaded] = useState<boolean>(false);
+
+  const handleUpload = (): void => {
+    setIsDocumentUploaded(true);
+  };
 
   const handleSendMessage = (text: string) => {
-    // 2. Safeguard against empty updates
     if (!text.trim()) return;
 
-    // 3. Create a structured user message matching our contract
     const userMessage: Message = {
-      id: crypto.randomUUID(), // Generates a safe, unique key string
+      id: crypto.randomUUID(),
       sender: 'user',
       text: text,
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     };
 
-    // 4. Append it to the UI history log feed instantly
     setMessages((prevMessages) => [...prevMessages, userMessage]);
     setIsGenerating(true);
 
-    // 5. Mocking the API search turnaround loop for now
+    // Mock API simulation
     setTimeout(() => {
       const agentMessage: Message = {
         id: crypto.randomUUID(),
@@ -39,14 +39,25 @@ const ChatGrid = () => {
       setIsGenerating(false);
     }, 1500);
   };
+
   return (
-    <div className="w-full max-w-2xl bg-zinc-900/80 border border-zinc-800 rounded-2xl shadow-2xl shadow-black/50 p-2 backdrop-blur-md flex flex-col ">
-        <ChatWindow messages={messages}/>
-        <ChatInput onSend={handleSendMessage} disabled={isGenerating}/>
-        <UploadBox/>
-
+    <div className="w-full max-w-2xl bg-zinc-900/80 border border-zinc-800 rounded-2xl shadow-2xl shadow-black/50 p-2 backdrop-blur-md flex flex-col gap-2">
+      {isDocumentUploaded ? (
+        <ChatWindow messages={messages} />
+      ) : (
+        <UploadBox onUploadSuccess={handleUpload} />
+      )}
+      
+      {/* 
+        The input should be disabled if the system is currently generating an answer 
+        OR if the document has not been uploaded yet.
+      */}
+      <ChatInput 
+        onSend={handleSendMessage} 
+        disabled={isGenerating || !isDocumentUploaded} 
+      />
     </div>
-  )
-}
+  );
+};
 
-export default ChatGrid
+export default ChatGrid;

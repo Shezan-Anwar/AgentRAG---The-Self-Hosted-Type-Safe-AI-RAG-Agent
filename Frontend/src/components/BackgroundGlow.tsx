@@ -8,7 +8,7 @@ const BackgroundGlow = () => {
       
       {/* 🔮 Glow Dot 1: Top Center Blue Bloom */}
       <motion.div 
-        className="absolute bottom-[-10%] left-1/2 -translate-x-1/2 w-[600px] h-[400px] rounded-full bg-blue-500/50" 
+        className="absolute bottom-[-10%] left-1/2 -translate-x-1/2 w-[700px] h-[500px] rounded-full bg-blue-500/50" 
         style={{ filter: 'blur(120px)' }}
         animate={{
           scale: [1, 1.15, 1],
@@ -25,7 +25,7 @@ const BackgroundGlow = () => {
       
       {/* 🌌 Glow Dot 2: Subtle Deep Indigo/Purple Offset Bloom */}
       <motion.div 
-        className="absolute bottom-[-20%] left-1/2 w-[00px] h-[300px] rounded-full bg-indigo-500/50" 
+        className="absolute bottom-[-10%] left-1/2 -translate-x-1/2 w-[700px] h-[500px] rounded-full bg-indigo-500/50" 
         style={{ filter: 'blur(100px)' }}
         animate={{
           scale: [1, 1.2, 1],
