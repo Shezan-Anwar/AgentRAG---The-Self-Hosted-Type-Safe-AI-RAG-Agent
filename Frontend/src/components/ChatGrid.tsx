@@ -13,7 +13,8 @@ const ChatGrid = () => {
     setIsDocumentUploaded(true);
   };
 
-  const handleSendMessage = (text: string) => {
+  // 🚀 1. Converted into an asynchronous execution scope to allow network requests
+  const handleSendMessage = async (text: string) => {
     if (!text.trim()) return;
 
     const userMessage: Message = {
@@ -26,18 +27,48 @@ const ChatGrid = () => {
     setMessages((prevMessages) => [...prevMessages, userMessage]);
     setIsGenerating(true);
 
-    // Mock API simulation
-    setTimeout(() => {
+    try {
+      // 🚀 2. Dispatch the reactive text query parameter payload directly to your FastAPI backend
+      const response = await fetch('http://127.0.0.1:8000/ask', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          question: text // Ensure 'question' matches the Pydantic schema key on your server
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Vector retrieval pipeline failed.');
+      }
+
+      const data = await response.json();
+
+      // 🚀 3. Map out the real synchronous response extracted by the backend LLM engine
       const agentMessage: Message = {
         id: crypto.randomUUID(),
         sender: 'agent',
-        text: `Received: "${text}". Vector context validation pipeline initialized successfully.`,
+        text: data.answer, // Ensure 'answer' matches what your Python dictionary returns
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       };
 
       setMessages((prevMessages) => [...prevMessages, agentMessage]);
+
+    } catch (error) {
+      console.error("Query Error:", error);
+      
+      // Injecting a clear system feedback message if network layer drops
+      const errorMessage: Message = {
+        id: crypto.randomUUID(),
+        sender: 'agent',
+        text: "🚨 Pipeline error: Unable to pull vector nodes. Confirm your FastAPI local script runtime is active.",
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      };
+      setMessages((prevMessages) => [...prevMessages, errorMessage]);
+    } finally {
       setIsGenerating(false);
-    }, 1500);
+    }
   };
 
   return (
