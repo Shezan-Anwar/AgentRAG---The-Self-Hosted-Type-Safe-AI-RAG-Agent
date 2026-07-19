@@ -4,7 +4,7 @@ import { motion } from "framer-motion"
 const BackgroundGlow = () => {
   return (
     // We use z-[-1] to force the entire background system behind the main content
-    <div className="absolute inset-0 overflow pointer-events-none z-0">
+    <div className="relative inset-0 overflow pointer-events-none z-0">
       
       {/* 🔮 Glow Dot 1: Top Center Blue Bloom */}
       <motion.div 
@@ -17,7 +17,7 @@ const BackgroundGlow = () => {
           y: [0, -10, 10, 0],
         }}
          transition={{
-          duration: 12,
+          duration: 11,
           repeat: Infinity,
           ease: "easeInOut",
         }}
@@ -34,7 +34,7 @@ const BackgroundGlow = () => {
           y: [0, 10, -10, 0],
         }}
         transition={{
-          duration: 3,
+          duration: 5,
           repeat: Infinity,
           ease: "easeInOut",
         }}
