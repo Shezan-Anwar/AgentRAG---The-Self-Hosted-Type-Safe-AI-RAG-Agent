@@ -8,3 +8,4 @@ langchain-huggingface
 sentence-transformers
 google_genai
 python-multipart
+pypdf

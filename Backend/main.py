@@ -1,4 +1,6 @@
-from fastapi import FastAPI , HTTPException
+from fastapi import FastAPI , HTTPException ,Form, File, UploadFile
+import io
+import pypdf
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 from app.services.document import saveDocumentToDB
@@ -29,16 +31,34 @@ def read_root():
     return {"status": "online", "message": "AgentRAG API is running"}
 
 @app.post("/ingest")
-def ingestTextData(payload : IngestionRequest):
+async def ingestTextData(file_name: str = Form(...), file: UploadFile = File(...)):
     """This will ingest the request and store it to neon server"""
     try :
-        doc_id = saveDocumentToDB(payload.file_name,payload.text_content)
+        contentBytes = await file.read()
+        text_content = ""
+
+        # 📄 Check if file is a PDF or standard Text
+        if file.filename.endswith(".pdf"):
+            pdf_reader = pypdf.PdfReader(io.BytesIO(contentBytes))
+            for page in pdf_reader.pages:
+                extracted = page.extract_text()
+                if extracted:
+                    text_content += extracted + "\n"
+        else:
+            
+            text_content = contentBytes.decode("utf-8")
+
+        if not text_content.strip():
+                raise HTTPException(status_code=400, detail="Could not extract readable text from document.")
+
+        doc_id = saveDocumentToDB(file_name, text_content)
         return {
             "success": True,
-            "message": f"document {payload.file_name} ingested successfully ",
+            "message": f"document {file_name} ingested successfully ",
             "document_Id":doc_id
         }
     except Exception as e:
+        print("🚨 INGESTION ERROR TRACE:", str(e))  
         raise HTTPException(status_code=500, detail=str(e))
     
 @app.post("/ask")
