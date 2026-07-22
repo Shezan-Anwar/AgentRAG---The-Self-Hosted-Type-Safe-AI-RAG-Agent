@@ -68,4 +68,9 @@ def askQuest(payload : ChatRequest):
         answer = generateResponse(payload.question)
         return {"question" : payload.question , "answer":answer.strip() }
     except Exception as e:
-        HTTPException(status_code=500,detail=str(e))
+        if "503" in str(e) or "UNAVAILABLE" in str(e):
+            return {
+                "question": payload.question,
+                "answer": "⚠️ The AI service is currently experiencing high demand. Please try sending your query again in a few seconds."
+            }
+        raise HTTPException(status_code=500, detail=str(e))
