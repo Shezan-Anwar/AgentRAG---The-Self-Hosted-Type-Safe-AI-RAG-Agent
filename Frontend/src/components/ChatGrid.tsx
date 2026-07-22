@@ -28,14 +28,14 @@ const ChatGrid = () => {
     setIsGenerating(true);
 
     try {
-      // 🚀 2. Dispatch the reactive text query parameter payload directly to your FastAPI backend
+      
       const response = await fetch('http://127.0.0.1:8000/ask', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ 
-          question: text // Ensure 'question' matches the Pydantic schema key on your server
+          question: text // 
         }),
       });
 
@@ -45,7 +45,6 @@ const ChatGrid = () => {
 
       const data = await response.json();
 
-      // 🚀 3. Map out the real synchronous response extracted by the backend LLM engine
       const agentMessage: Message = {
         id: crypto.randomUUID(),
         sender: 'agent',
@@ -74,15 +73,11 @@ const ChatGrid = () => {
   return (
     <div className="w-full max-w-2xl bg-zinc-900/80 border border-zinc-800 rounded-2xl shadow-2xl shadow-black/50 p-2 backdrop-blur-md flex flex-col gap-2">
       {isDocumentUploaded ? (
-        <ChatWindow messages={messages} />
+        <ChatWindow isGenerating ={isGenerating} messages={messages} />
       ) : (
         <UploadBox onUploadSuccess={handleUpload} />
       )}
       
-      {/* 
-        The input should be disabled if the system is currently generating an answer 
-        OR if the document has not been uploaded yet.
-      */}
       <ChatInput 
         onSend={handleSendMessage} 
         disabled={isGenerating || !isDocumentUploaded} 

@@ -3,16 +3,17 @@ import type { Message } from '../types/Chat';
 
 interface ChatWindowProps {
   messages: Message[];
+  isGenerating : boolean;
 }
 
-export const ChatWindow = ({ messages }: ChatWindowProps) => {
-  // 🚀 1. Create a reference point to anchor the bottom of the message thread
+export const ChatWindow = ({ messages , isGenerating }: ChatWindowProps) => {
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // 🚀 2. Automatically trigger a smooth scroll down whenever a new message updates the DOM
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+  }, [messages,isGenerating]);
 
   return (
     <div className="flex-1 w-full max-h-[400px] overflow-y-auto p-4 space-y-4 bg-zinc-900/40 rounded-xl border border-zinc-800/60 scrollbar-thin scrollbar-thumb-zinc-800 flex flex-col justify-start">
@@ -46,7 +47,14 @@ export const ChatWindow = ({ messages }: ChatWindowProps) => {
         ))
       )}
       
-      
+      {isGenerating && (
+        <div className="mr-auto items-start flex flex-col max-w-[80%]">
+          <div className="px-4 py-2.5 rounded-2xl text-sm bg-zinc-800/60 border border-zinc-700/30 text-zinc-400 rounded-tl-none flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+            <p className="text-xs italic tracking-wide animate-pulse">Agent is thinking...</p>
+          </div>
+        </div>
+      )}
       <div ref={messagesEndRef} />
     </div>
   );
