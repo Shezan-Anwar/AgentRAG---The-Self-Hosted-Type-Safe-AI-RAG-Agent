@@ -10,7 +10,6 @@ export const ChatWindow = ({ messages , isGenerating }: ChatWindowProps) => {
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // 🚀 2. Automatically trigger a smooth scroll down whenever a new message updates the DOM
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages,isGenerating]);
