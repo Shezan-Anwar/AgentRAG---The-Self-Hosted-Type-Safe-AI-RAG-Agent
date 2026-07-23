@@ -3,14 +3,17 @@ import ChatInput from './ChatInput'
 import ChatWindow from './ChatWIndow';
 import UploadBox from './UploadBox';
 import type { Message } from '../types/Chat';
+import AddedFile from './AddedFile';
 
 const ChatGrid = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
   const [isDocumentUploaded, setIsDocumentUploaded] = useState<boolean>(false);
+  const [documentName, setDocumentName] = useState<string>('');
 
-  const handleUpload = (): void => {
+  const handleUpload = (title :string): void => {
     setIsDocumentUploaded(true);
+    setDocumentName(title);
   };
 
   // 🚀 1. Converted into an asynchronous execution scope to allow network requests
@@ -77,7 +80,9 @@ const ChatGrid = () => {
       ) : (
         <UploadBox onUploadSuccess={handleUpload} />
       )}
-      
+      {isDocumentUploaded && documentName && (
+      <AddedFile fileName={documentName} />
+      )}
       <ChatInput 
         onSend={handleSendMessage} 
         disabled={isGenerating || !isDocumentUploaded} 

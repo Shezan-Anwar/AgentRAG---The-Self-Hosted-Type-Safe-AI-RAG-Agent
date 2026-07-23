@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import { IoCloudUploadSharp } from "react-icons/io5";
 
 interface UploadBoxProps {
-  onUploadSuccess: () => void;
+  onUploadSuccess: (title: string) => void;
 }
 
 const UploadBox: React.FC<UploadBoxProps> = ({ onUploadSuccess }) => {
@@ -44,7 +44,7 @@ const UploadBox: React.FC<UploadBoxProps> = ({ onUploadSuccess }) => {
         if (!response.ok) {
           throw new Error('Vector ingestion process failed.');
         }
-        onUploadSuccess();
+        onUploadSuccess(finalTitle);
       } catch (err: any) {
         console.error("Ingestion error:", err);
         setErrorMsg(err.message || 'Pipeline upload failed. Is your backend online?');
