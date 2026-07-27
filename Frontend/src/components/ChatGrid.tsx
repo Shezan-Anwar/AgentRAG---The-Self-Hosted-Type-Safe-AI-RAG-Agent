@@ -9,12 +9,12 @@ const ChatGrid = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
   const [isDocumentUploaded, setIsDocumentUploaded] = useState<boolean>(false);
-  const [documentName, setDocumentName] = useState<string>('');
+  const [documentNames, setDocumentNames] = useState<string[]>([]);
 
-  const handleUpload = (title :string): void => {
-    setIsDocumentUploaded(true);
-    setDocumentName(title);
-  };
+  const handleUpload = (titles: string[]): void => {
+  setDocumentNames(titles);
+  setIsDocumentUploaded(true);
+};
 
   // 🚀 1. Converted into an asynchronous execution scope to allow network requests
   const handleSendMessage = async (text: string) => {
@@ -74,20 +74,24 @@ const ChatGrid = () => {
   };
 
   return (
-    <div className="w-full max-w-2xl bg-zinc-900/80 border border-zinc-800 rounded-2xl shadow-2xl shadow-black/50 p-2 backdrop-blur-md flex flex-col gap-2">
-      {isDocumentUploaded ? (
-        <ChatWindow isGenerating ={isGenerating} messages={messages} />
-      ) : (
-        <UploadBox onUploadSuccess={handleUpload} />
-      )}
-      {isDocumentUploaded && documentName && (
-      <AddedFile fileName={documentName} />
-      )}
-      <ChatInput 
-        onSend={handleSendMessage} 
-        disabled={isGenerating || !isDocumentUploaded} 
-      />
-    </div>
+  <div className="w-full max-w-2xl bg-zinc-900/80 border border-zinc-800 rounded-2xl shadow-2xl shadow-black/50 p-2 backdrop-blur-md flex flex-col gap-2">
+    {isDocumentUploaded ? (
+      <ChatWindow isGenerating={isGenerating} messages={messages} />
+    ) : (
+      <UploadBox onUploadSuccess={handleUpload} />
+    )}
+
+    {/* 🚀 Fixed variable names: check array length and pass documentNames */}
+    {isDocumentUploaded && documentNames.length > 0 && (
+      <AddedFile fileNames={documentNames} />
+    )}
+
+    <ChatInput 
+      onSend={handleSendMessage} 
+      disabled={isGenerating || !isDocumentUploaded} 
+    />
+  </div>
+
   );
 };
 

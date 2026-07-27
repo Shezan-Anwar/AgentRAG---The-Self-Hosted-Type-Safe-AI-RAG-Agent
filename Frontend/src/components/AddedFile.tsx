@@ -1,16 +1,26 @@
-import React from 'react'
-import type { AddedFileProps } from '../types/Addedfile';
+import React from 'react';
 import { FcOpenedFolder } from "react-icons/fc";
 
-const AddedFile : React.FC<AddedFileProps> = ({fileName}) => {
-  return (
-    <div className="flex items-center  gap-2 px-3 py-1.5 bg-zinc-800/80 border border-zinc-700/50 rounded-lg w-fit text-xs text-zinc-300">
-      <span className=" animate-pulse" ><FcOpenedFolder /></span>
-        <span className="text-gray font-semibold truncate max-w-[200px] animate-pulse">
-         {fileName}
-        </span>
-    </div>
-  )
+interface AddedFileProps {
+  fileNames: string[];
 }
 
-export default AddedFile
+const AddedFile: React.FC<AddedFileProps> = ({ fileNames }) => {
+  return (
+    <div className="flex flex-wrap items-center gap-2 max-h-[100px] overflow-y-auto p-1">
+      {fileNames.map((name, index) => (
+        <div 
+          key={index} 
+          className="flex items-center gap-1.5 px-2.5 py-1 bg-zinc-800/90 border border-zinc-700/60 rounded-lg text-xs text-zinc-200 shadow-sm"
+        >
+          <span className="text-sm"><FcOpenedFolder /></span>
+          <span className="font-medium truncate max-w-[150px]">
+            {name}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export default AddedFile;

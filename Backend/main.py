@@ -1,4 +1,5 @@
 from fastapi import FastAPI , HTTPException ,Form, File, UploadFile
+from typing import List , Optional
 import io
 import pypdf
 from pydantic import BaseModel
@@ -31,36 +32,46 @@ def read_root():
     return {"status": "online", "message": "AgentRAG API is running"}
 
 @app.post("/ingest")
-async def ingestTextData(file_name: str = Form(...), file: UploadFile = File(...)):
-    """This will ingest the request and store it to neon server"""
-    try :
-        contentBytes = await file.read()
-        text_content = ""
+async def ingestTextData(
+    files: List[UploadFile] = File(...),  # 👈 MUST be List[UploadFile], NOT just UploadFile
+    file_name: Optional[str] = Form(None)
+):
+    try:
+        ingested_docs = []
 
-        # 📄 Check if file is a PDF or standard Text
-        if file.filename.endswith(".pdf"):
-            pdf_reader = pypdf.PdfReader(io.BytesIO(contentBytes))
-            for page in pdf_reader.pages:
-                extracted = page.extract_text()
-                if extracted:
-                    text_content += extracted + "\n"
-        else:
-            
-            text_content = contentBytes.decode("utf-8")
+        for file in files:  # 👈 Now Python knows this is a list and can iterate cleanly
+            contentBytes = await file.read()
+            text_content = ""
 
-        if not text_content.strip():
-                raise HTTPException(status_code=400, detail="Could not extract readable text from document.")
+            if file.filename.endswith(".pdf"):
+                pdf_reader = pypdf.PdfReader(io.BytesIO(contentBytes))
+                for page in pdf_reader.pages:
+                    extracted = page.extract_text()
+                    if extracted:
+                        text_content += extracted + "\n"
+            else:
+                text_content = contentBytes.decode("utf-8")
 
-        doc_id = saveDocumentToDB(file_name, text_content)
+            if not text_content.strip():
+                continue
+
+            title = file_name.strip() if (file_name and len(files) == 1) else file.filename.split('.')[0]
+
+            doc_id = saveDocumentToDB(title, text_content)
+            ingested_docs.append({"filename": file.filename, "document_id": doc_id, "title": title})
+
+        if not ingested_docs:
+            raise HTTPException(status_code=400, detail="Could not extract readable text from document(s).")
+
         return {
             "success": True,
-            "message": f"document {file_name} ingested successfully ",
-            "document_Id":doc_id
+            "message": f"Successfully ingested {len(ingested_docs)} document(s).",
+            "documents": ingested_docs
         }
+
     except Exception as e:
-        print("🚨 INGESTION ERROR TRACE:", str(e))  
+        print("🚨 INGESTION ERROR TRACE:", str(e))
         raise HTTPException(status_code=500, detail=str(e))
-    
 @app.post("/ask")
 def askQuest(payload : ChatRequest):
     """this will take the question of user to the agentRAG"""
