@@ -1,6 +1,7 @@
 import React from 'react'
 import { useState } from 'react';
 import { IoSendSharp } from "react-icons/io5";
+import { IoDocumentAttachSharp } from "react-icons/io5";
 interface ChatInputProp {
     onSend : (text: string)=>void;
     disabled : boolean;
@@ -21,7 +22,11 @@ const ChatInput = ({onSend ,disabled}:ChatInputProp) => {
     
 }
   return (
-    <div className="w-full pt-1">
+    <div className=" width-full pt-1 flex gap-3">
+      <button className='items-center bg-blue-800 hover:bg-blue-600 disabled:bg-zinc-800 border border-transparent text-white font-medium px-5 rounded-lg transition-all active:scale-[0.98] '>
+        <IoDocumentAttachSharp />
+      </button>
+    
       <form onSubmit={handleSubmit} className="flex items-center gap-3 w-full">
         
         <input 

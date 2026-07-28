@@ -97,7 +97,7 @@ const UploadBox: React.FC<UploadBoxProps> = ({ onUploadSuccess }) => {
         <div>
           <input
             type='text'
-            placeholder='Name of doc (Optional for multi-file)'
+            placeholder='Name of doc'
             value={docTitle}
             onChange={(e) => setDocTitle(e.target.value)}
             disabled={isUploading}
