@@ -15,8 +15,10 @@ const ChatGrid = () => {
   setDocumentNames(titles);
   setIsDocumentUploaded(true);
 };
-
-  // 🚀 1. Converted into an asynchronous execution scope to allow network requests
+  const handleAdditionalUpload = (newTitles: string[]): void => {
+  setDocumentNames((prevNames) => [...prevNames, ...newTitles]);
+  setIsDocumentUploaded(true);
+};
   const handleSendMessage = async (text: string) => {
     if (!text.trim()) return;
 
@@ -88,6 +90,7 @@ const ChatGrid = () => {
 
     <ChatInput 
       onSend={handleSendMessage} 
+      onUploadSuccess={handleAdditionalUpload}
       disabled={isGenerating || !isDocumentUploaded} 
     />
   </div>

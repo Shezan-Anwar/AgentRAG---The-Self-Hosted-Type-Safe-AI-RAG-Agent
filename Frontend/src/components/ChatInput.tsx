@@ -1,29 +1,85 @@
 import React from 'react'
+import { useRef } from 'react';
 import { useState } from 'react';
 import { IoSendSharp } from "react-icons/io5";
 import { IoDocumentAttachSharp } from "react-icons/io5";
 interface ChatInputProp {
     onSend : (text: string)=>void;
+    onUploadSuccess: (newTitles: string[]) => void;
     disabled : boolean;
 }
 
 
-const ChatInput = ({onSend ,disabled}:ChatInputProp) => {
+const ChatInput = ({ onSend, onUploadSuccess, disabled }: ChatInputProp) => {
     const [input, setInput] = useState<string>('');
-    
+    const [isUploading, setIsUploading] = useState<boolean>(false);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
 
     const handleSubmit = (e: React.FormEvent) =>{
         e.preventDefault();
-        if(input.trim() && !disabled){
+        if(input.trim() && !disabled && !isUploading){
             onSend(input);
             setInput('');
         }
     
-}
+};
+const handleAttachClick = () => {
+    if (isUploading) return;
+    fileInputRef.current?.click();
+  };
+const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {  
+    const files = event.target.files;
+    if (!files || files.length === 0) return;
+
+    setIsUploading(true);
+    const formData = new FormData();
+
+    Array.from(files).forEach((file) => {
+      formData.append('files', file);
+    });
+    try {
+      const response = await fetch('http://127.0.0.1:8000/ingest', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error('Mid-conversation vector ingestion failed.');
+      }
+
+      const data = await response.json();
+
+      let uploadedTitles: string[] = [];
+      if (data.documents && data.documents.length > 0) {
+        uploadedTitles = data.documents.map((doc: { title: string }) => doc.title);
+      } else {
+        uploadedTitles = Array.from(files).map((f) => f.name.split('.')[0]);
+      }
+      onUploadSuccess(uploadedTitles);
+    } catch (err) {
+      console.error("Attachment error:", err);
+    } finally {
+      setIsUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = ''; // Reset file input
+    }
+  };
   return (
     <div className=" width-full pt-1 flex gap-3">
-      <button className='items-center bg-blue-800 hover:bg-blue-600 disabled:bg-zinc-800 border border-transparent text-white font-medium px-5 rounded-lg transition-all active:scale-[0.98] '>
+      <input 
+        type="file" 
+        accept=".pdf,.txt" 
+        multiple 
+        ref={fileInputRef} 
+        onChange={handleFileChange} 
+        className="hidden" 
+      />
+      <button 
+      type="button"
+      onClick={handleAttachClick}
+      disabled={isUploading}
+      title="Attach additional document"
+      className='items-center bg-blue-800 hover:bg-blue-600 disabled:bg-zinc-800 border border-transparent text-white font-medium px-5 rounded-lg transition-all active:scale-[0.98] '>
         <IoDocumentAttachSharp />
       </button>
     
