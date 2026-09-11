@@ -1,6 +1,6 @@
 #In this file ill be making the embeddings of the ducuments
 from langchain_huggingface import HuggingFaceEmbeddings
-
+from typing import List
 embeddingModel = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
 
 def makeEmbeddings(text: str)-> List[float]:
