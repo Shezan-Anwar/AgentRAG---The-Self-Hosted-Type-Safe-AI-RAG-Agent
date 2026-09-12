@@ -1,12 +1,17 @@
-#In this file ill be making the embeddings of the ducuments
-from langchain_huggingface import HuggingFaceEmbeddings
+import os
 from typing import List
-embeddingModel = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+from langchain_huggingface import HuggingFaceEndpointEmbeddings
 
-def makeEmbeddings(text: str)-> List[float]:
+embeddingModel = HuggingFaceEndpointEmbeddings(
+    model="sentence-transformers/all-MiniLM-L6-v2",
+    task="feature-extraction",
+    huggingfacehub_api_token=os.getenv("HF_TOKEN"),
+)
+
+def makeEmbeddings(text: str) -> List[float]:
     try:
         vector = embeddingModel.embed_query(text)
         return vector
     except Exception as e:
-        print(f"Error in making embeddings : {e}")
+        print(f"Error in making embeddings: {e}")
         raise e
