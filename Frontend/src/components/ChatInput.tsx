@@ -1,4 +1,3 @@
-import React from 'react'
 import { useRef } from 'react';
 import { useState } from 'react';
 import { IoSendSharp } from "react-icons/io5";

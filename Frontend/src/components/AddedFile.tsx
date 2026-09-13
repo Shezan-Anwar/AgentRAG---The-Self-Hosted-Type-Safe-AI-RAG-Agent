@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { FcOpenedFolder } from "react-icons/fc";
 
 interface AddedFileProps {
