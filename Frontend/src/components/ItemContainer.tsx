@@ -1,4 +1,4 @@
-import React from 'react'
+
 import CenterText from './CenterText'
 import GridContainer from './GridContainer'
 import ChatGrid from './ChatGrid'

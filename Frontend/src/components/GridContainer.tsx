@@ -1,4 +1,3 @@
-import React from 'react';
 import Card from './Card';
 import videoSource1 from "../assets/create_second_hook_video_fo.mp4";
 import videoSource2 from "../assets/this_is_the_ui_of_agentRAG_tak.mp4";

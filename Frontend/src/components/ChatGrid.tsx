@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import ChatInput from './ChatInput'
 import ChatWindow from './ChatWIndow';
 import UploadBox from './UploadBox';
