@@ -1,5 +1,6 @@
 # i created chunks in this file 
 from langchain_text_splitters import RecursiveCharacterTextSplitter
+from typing import List
 
 def breakIntoChunks(rawText:str) -> List[str]:
     """
