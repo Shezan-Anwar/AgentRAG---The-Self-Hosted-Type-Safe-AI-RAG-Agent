@@ -70,7 +70,7 @@ async def ingestTextData(
         }
 
     except Exception as e:
-        print("🚨 INGESTION ERROR TRACE:", str(e))
+        printf("🚨 INGESTION ERROR TRACE:\n{traceback.format_exc()}")
         raise HTTPException(status_code=500, detail=str(e))
 @app.post("/ask")
 def askQuest(payload : ChatRequest):
