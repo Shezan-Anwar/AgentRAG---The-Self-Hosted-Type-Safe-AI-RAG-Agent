@@ -9,3 +9,4 @@ google_genai
 python-multipart
 pypdf
 huggingface-hub
+numpy
