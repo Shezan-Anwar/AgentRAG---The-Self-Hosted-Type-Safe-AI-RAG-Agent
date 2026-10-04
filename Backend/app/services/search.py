@@ -4,7 +4,7 @@ from app.database import get_db_connection
 from app.services.embedding import makeEmbeddings
 from typing import List, Optional
 
-def searchSimilar(queryText : str, limit : int = 2)-> List[dict]:
+def searchSimilar(queryText : str, limit : int = 2)-> list[dict]:
     queryVector = makeEmbeddings(queryText)
     conn = get_db_connection()
     cur = conn.cursor()

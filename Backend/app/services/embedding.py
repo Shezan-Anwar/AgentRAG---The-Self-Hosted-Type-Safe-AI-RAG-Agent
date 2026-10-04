@@ -8,7 +8,7 @@ embeddingModel = HuggingFaceEndpointEmbeddings(
     huggingfacehub_api_token=os.getenv("HF_TOKEN"),
 )
 
-def makeEmbeddings(text: str) -> List[float]:
+def makeEmbeddings(text: str) -> list[float]:
     try:
         vector = embeddingModel.embed_query(text)
         return vector

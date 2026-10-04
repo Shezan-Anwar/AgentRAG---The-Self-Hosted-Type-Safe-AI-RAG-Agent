@@ -33,7 +33,7 @@ def read_root():
 
 @app.post("/ingest")
 async def ingestTextData(
-    files: List[UploadFile] = File(...),  # 👈 MUST be List[UploadFile], NOT just UploadFile
+    files: list[UploadFile] = File(...),  # 👈 MUST be List[UploadFile], NOT just UploadFile
     file_name: Optional[str] = Form(None)
 ):
     try:

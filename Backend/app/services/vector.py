@@ -2,7 +2,7 @@
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from typing import List
 
-def breakIntoChunks(rawText:str) -> List[str]:
+def breakIntoChunks(rawText:str) -> list[str]:
     """
     It will take raw text and break it into chunks 
     chunk size= 500
