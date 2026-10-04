@@ -70,7 +70,11 @@ async def ingestTextData(
         }
 
     except Exception as e:
-        print("🚨 INGESTION ERROR TRACE:\n{traceback.format_exc()}")
+        import traceback
+        print("=" * 50)
+        print("CRITICAL INGESTION ERROR:")
+        traceback.print_exc()  # 👈 THIS WILL PRINT THE FILE AND LINE NUMBER
+        print("=" * 50)
         raise HTTPException(status_code=500, detail=str(e))
 @app.post("/ask")
 def askQuest(payload : ChatRequest):
