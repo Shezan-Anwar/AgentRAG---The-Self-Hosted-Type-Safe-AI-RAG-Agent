@@ -4,6 +4,7 @@ import ChatWindow from './ChatWIndow';
 import UploadBox from './UploadBox';
 import type { Message } from '../types/Chat';
 import AddedFile from './AddedFile';
+import { API_ENDPOINTS } from '../config';
 
 const ChatGrid = () => {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -34,7 +35,7 @@ const ChatGrid = () => {
 
     try {
       
-      const response = await fetch('http://127.0.0.1:8000/ask', {
+      const response = await fetch(`${API_ENDPOINTS.ASK}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

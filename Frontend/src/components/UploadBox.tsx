@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import { IoCloudUploadSharp } from "react-icons/io5";
+import { API_ENDPOINTS } from '../config';
 
 interface UploadBoxProps {
   onUploadSuccess: (titles: string[]) => void; 
@@ -11,7 +12,6 @@ const UploadBox: React.FC<UploadBoxProps> = ({ onUploadSuccess }) => {
   const [docTitle, setDocTitle] = useState<string>('');
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000';
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (!files || files.length === 0) return;
@@ -31,7 +31,7 @@ const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000';
     }
 
     try {
-  const response = await fetch(`${BASE_URL}/ingest`, {
+  const response = await fetch(`${API_ENDPOINTS.INGEST}`, {
     method: 'POST',
     body: formData,
   });

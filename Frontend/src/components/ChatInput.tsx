@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { useState } from 'react';
 import { IoSendSharp } from "react-icons/io5";
 import { IoDocumentAttachSharp } from "react-icons/io5";
+import { API_ENDPOINTS } from '../config';
 interface ChatInputProp {
     onSend : (text: string)=>void;
     onUploadSuccess: (newTitles: string[]) => void;
@@ -38,7 +39,7 @@ const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
       formData.append('files', file);
     });
     try {
-      const response = await fetch('http://127.0.0.1:8000/ingest', {
+      const response = await fetch(`${API_ENDPOINTS.INGEST}`, {
         method: 'POST',
         body: formData,
       });
