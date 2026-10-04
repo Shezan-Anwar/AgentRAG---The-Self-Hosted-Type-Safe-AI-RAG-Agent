@@ -1,5 +1,5 @@
-from fastapi import FastAPI , HTTPException ,Form, File, UploadFile
 from typing import List , Optional
+from fastapi import FastAPI , HTTPException ,Form, File, UploadFile
 import io
 import pypdf
 from pydantic import BaseModel
@@ -39,7 +39,7 @@ async def ingestTextData(
     try:
         ingested_docs = []
 
-        for file in files:  # 👈 Now Python knows this is a list and can iterate cleanly
+        for file in files:
             contentBytes = await file.read()
             text_content = ""
 
