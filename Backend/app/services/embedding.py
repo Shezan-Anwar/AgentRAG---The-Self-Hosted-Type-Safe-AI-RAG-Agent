@@ -1,9 +1,9 @@
 import os
-from typing import List
-from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
 
-embeddingModel = HuggingFaceEmbeddings(
-    model_name="sentence-transformers/all-MiniLM-L6-v2"
+embeddingModel = GoogleGenerativeAIEmbeddings(
+    model="models/text-embedding-004",
+    google_api_key=os.getenv("GEMINI_API_KEY")
 )
 
 def makeEmbeddings(text: str) -> list[float]:
