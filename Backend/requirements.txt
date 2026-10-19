@@ -10,3 +10,4 @@ python-multipart
 pypdf
 huggingface-hub
 numpy
+sentence-transformers
